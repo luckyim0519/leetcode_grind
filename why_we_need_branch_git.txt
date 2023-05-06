@@ -1,0 +1,58 @@
+
+Okay.
+I finally have to encounter the git branch...from ECE297 @ UofT!
+I had so many problems with the git branch at this point.
+So I would like to dive into git branch study a bit more.
+
+
+>>> Defintion of the Version control system >>>
+
+Version control systme is a software package that when
+initiated will monitor your files for changes and allow
+you to tag the changes at different levels so that you can
+revisit those tagged stages whenver needed.
+
+>>>                                         >>>
+
+Okay for me, it was kind of making sense.
+Because you might have written down something continously
+and found that you want to re-use the old code and deleting
+the previous one.
+This is the reason why we need Version control system.
+
+I have been doing this blindlessly in the past by just
+copying and pasting the whole function code in the notepad
+and reuse them... this is the very weak version control system!
+
+>>> Why do you need a version control system? >>>
+
+1. To manage the multiple versions of the same files under the 
+sane name, thus avoiding the cluttering of files with 
+small differences in their names
+
+2. Markign the specific portion of the content in the files
+that you might need in the future before changing them for present
+needs.
+
+3. To collaborate with the multiple prograammers.
+
+>>>                                             >>>
+
+>>> Types of the version control system >>>
+
+There are two types of the version contorl system which are
+
+1. centralized version control system
+    many prograammers save their files in the common place where
+    everybody has access to from their local machiens (clients).
+
+                CENTRALIZED VCS SERVER
+                 ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+    User A --->  |   VERSION 1  |
+                 |   VERSION 2  |
+                 |     ...      |
+    User B ----> |   VERSION N  |
+                 ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+2. distributed version control system
+
