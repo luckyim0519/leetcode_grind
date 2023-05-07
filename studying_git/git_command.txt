@@ -1,5 +1,6 @@
 COMMANDS
 
+/* commands to set before making the file */
 .gitignore
 
 >> Functions 
@@ -23,7 +24,7 @@ Example:
     | DIRECTORY  |     |   AREA    |        |  DIRECTORY |
     |            |     |           |        |            |
     ㅡㅡㅡㅡㅡㅡㅡ       ㅡㅡㅡㅡㅡㅡ          ㅡㅡㅡㅡㅡㅡㅡ 
-    
+
 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ>>>
 stage files
 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ>>>
@@ -32,7 +33,12 @@ stage files
                     ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ>>>
 
 /* for committing */
+
 git add .  // this will add files into repository, and
               confirmed those changes by staging them.
              
+
+git commit -m "commit_message" // this will add the files to the
+                                  repository. Any changeds made to these files
+                                  will be relative.
 
