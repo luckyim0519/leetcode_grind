@@ -19,11 +19,12 @@ Example:
 
 /* git working stages */
 
-----|ㅡㅡㅡㅡㅡㅡㅡ------ㅡㅡㅡㅡㅡㅡㅡ ------ㅡㅡㅡㅡㅡㅡㅡㅡ
-    | WORKING    |     |  STAGING  |        |  GIT       |
-    | DIRECTORY  |     |   AREA    |        |  DIRECTORY |
-    |            |     |           |        |            |
-    ㅡㅡㅡㅡㅡㅡㅡ       ㅡㅡㅡㅡㅡㅡ          ㅡㅡㅡㅡㅡㅡㅡ 
+>>>>>>>>>>>>>>>>>>>>>>>>>> LOCAL >>>>>>>>>>>>>>>>>>>>>>>>>>>.  >>>>>>>>>> REMOTE >>>>>>>>
+----|ㅡㅡㅡㅡㅡㅡㅡ------ㅡㅡㅡㅡㅡㅡㅡ -------ㅡㅡㅡㅡㅡㅡㅡㅡ ------ㅡㅡㅡㅡㅡㅡㅡㅡ
+    | WORKING    |     |  STAGING  |        |  LOCAL      |       | REMOTE      |
+    | DIRECTORY  |     |   AREA    |        |  REPOSITORY |       | REPOSITORY  |
+    |            |     |           |        |             |       |             |
+    ㅡㅡㅡㅡㅡㅡㅡ       ㅡㅡㅡㅡㅡㅡ          ㅡㅡㅡㅡㅡㅡㅡㅡ       ㅡㅡㅡㅡㅡㅡㅡㅡ
 
 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ>>>
 stage files
@@ -31,14 +32,68 @@ stage files
                     ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ>>>
                         commit files
                     ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ>>>
+                                        ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ>>>
+                                            git push
+                                        ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ>>>
+                                        <<<ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+                                             git pull 
+                                        <<<ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+                                        
+    <<<ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+            git checkout
+    <<<ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    <<<ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+            git merge
+    <<<ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+/* checking the status */
+git status                     // print out the project that the git is having 
+                                  currently. 
 
 /* for committing */
 
-git add .  // this will add files into repository, and
-              confirmed those changes by staging them.
+git add "file.name"             // this will add the file.name in staging area
+
+git add "directory.name"        // this will add the directory in staging area
+
+git add .                       // this will add all files into repository, and
+                                   confirmed those changes by staging them.
              
 
-git commit -m "commit_message" // this will add the files to the
-                                  repository. Any changeds made to these files
-                                  will be relative.
+git commit -m "commit_message"  // this will add the files to the
+                                   repository. Any changeds made to these files
+                                   will be relative.
+
+git log                         // gives history of a repository, it gives us information 
+                                   such as commit ID, author, date, and the commit comment 
+                                   given by 
+
+git log --pretty=online         // gives the log history in a one line where it is easy to read
+                                    --pretty is the formatting commands
+
+/* for branching instruction  */
+
+git branch "branch_name"        // creating the new branch
+
+git checkout -b "branch_name"   // create the branch, and jumps to the branch that is created.
+
+git branch -d "branch_name"     // delete the branch that was once created.
+
+git merge "branch_name"         // merging the current branch from branch_name\
+
+git merge --abort               // abort the merge process and go back to previous stage when conflict happended
+
+git checkout "commit_id"        // directs to the HEAD and go to this specific
+                                   commit.
+
+now you have travelled back to the previous commit, and your files will
+contain the contents of the previouis commit.
+
+git checkout master             // to return to the lastest changes, this will bring you
+                                   the lastest changes.
+
+However, there is a confusion between the checkout and reset of branches!
+
+git reset "file.name"           // place back the file that was once staged.
 
