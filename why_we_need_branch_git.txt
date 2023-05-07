@@ -56,3 +56,8 @@ There are two types of the version contorl system which are
 
 2. distributed version control system
 
+There is high risk involved in using a centralized version control
+concept, on the cotnrary you lose the power to work collaboratively
+when you use local version control.
+
+you will combine the advavntage of both and maek a hybrid system.
