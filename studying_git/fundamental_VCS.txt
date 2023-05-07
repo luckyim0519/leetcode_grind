@@ -61,3 +61,23 @@ concept, on the cotnrary you lose the power to work collaboratively
 when you use local version control.
 
 you will combine the advavntage of both and maek a hybrid system.
+This is the reason why the distributed version control system came into place.
+
+IT has the advantages of local version control system ..
+1. making local cahgnes without any concerns of full time-connectivity
+ to the server.
+ 2. Not relying on the single copy of files stored in the server.
+
+ These are combined with the advantages of centralized version control system
+ such as...
+ 1. reusability of work
+ 2. collaborating working, not relying on history stored on individual mahicnes.
+
+ >> This will allow to act in both ways.
+ 1. stores entrie history of the file/files on each and every
+ machine locally and also syncs the local chagnes made by the
+ user back to the server whenver required so that the changes
+ can be shared with others providing a collaborative working 
+ environment.
+
+ 
