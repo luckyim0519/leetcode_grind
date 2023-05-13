@@ -1,0 +1,186 @@
+###################### Component in the Hardware ######################
+                            1. Processor
+                            2. Memory
+                            3. IO devices
+                            4. Interrpts
+
+############ Processor ############
+- CPU executes a set of instructions
+    - different for different CPU architecture
+    - various memory and register-based instruction
+
+- Anatomy of a CPU
+    - program counter (PC): holds the next address of next instruction
+    - instruction register (IR): holds instruction being executed
+    - general register (reg 0..n): hold variables
+    - stack pointer (SP): holds address for accessing stack
+    - status register (SR): holds control bits that affect program execution,
+      also called processor status word. 
+    
+- CPU execution
+ all a CPU does is Fetch/Decode/executed
+
+PC = <start address>
+while (halt falg is not set){
+    IR = memory[PC]; //read from memory
+    PC = PC + 1; 
+    execute(IR); //decode and execute instruction uses registers, stack pointer..
+}
+
+############ Memory #############
+- memory (DRAM) provides sotrage (array of bytes)
+- each byte has unique address
+- No. of bits that represent address is called "address width" 
+    e.g 32 bit , 64 bit CPU
+- simple abstraction
+    Write(address, value), writes a byre
+     -also called store instruction
+    value = Read(address), returns last value written
+     - also called load instruction
+
+############ I/O Devices #############
+- devices are connected to device-specific controllers
+- one or more buses connect the CPU to memroy and to device controllers
+- bus is a shared medium, where it has to connect the CPU
+
+Q. How does CPU communicate with devices? 
+- each controller owns a range of bus addresses.
+- CPU communicates with controller bt sending mesaage to address using ...
+     - special I/O instructiona, 
+     - memory mapped I/O
+        - certain memory locations are mapped to device registers
+        - CPU reads/writes these memory locations. 
+            - H/W routes these loads/stores to device controller
+
+############# Communicating with Devices #############
+
+send(address, value)
+    - cpu writes value to an address
+value = Receive(address)
+    - CPU will poll (continuously read) addess for a value to determine whether
+      data is available
+    - then read the data using another address
+
+how often should we poll the device?
+- keyboard device, high-speed n/w device
+   -> polling roughyl based on the data arrival frequency. 
+   -> faster polling wastes CPU, with slower polling arriving data will be delayed or
+     might be dropped.
+
+Is this model similar to the memory abstraction ? model seems similar to memory,
+but data may never arrive , be corrupted or arrive out of order. 
+
+Thus the polling is not efficient as it will keep asking for the polling, that is why 
+we use interrupt!
+
+CPU and devices can run concurrently more efficiently if the device can send an
+interrupt signal to the CPU when it is done.
+CPU has an interrupt request flag that can be set by devices.
+
+############# Processor Execution with Interrupts #############
+
+step 1: when interrupt flag is set
+    - H/W saves PC
+    - set PC to a predetermined address, containing code called interrupt handler
+
+step 2: when h/w executes next instruction, interrupt handler (IH) code runs
+    - IH saves CPU registers of interurupted program    // why do we need this? 
+                                                           since handling of device event can cause
+                                                           clobber register, we need to save these registers
+                                                           so that when we return the interrupted program continue running.
+
+    - IH runs code to handle device event               
+    - IH restores CPU registers of interrupted program  // why do we need this? 
+                                                           since handling of device event can cause
+                                                           clobber register, we need to save these registers
+                                                           so that when we return the interrupted program continue running.
+                                                           
+step 3: interrupt handler runs "return from interrupt" instruction
+    - instruction set PC to the original next instruction of interrupted program
+
+Result: interrupt handling behaves like a functio ncall, but can occur at any time,
+        and the program is unaware it occured.
+
+#### example of the processor execution with Interrupts ####
+PC = <start address>;
+while (halt flag is not set){
+    IR = memory[PC]; // read from memory
+    PC = PC + 1;
+    execute(IR); 
+    
+    /* step 1 */
+    if (InterruptRequest){                  
+        hardware saves PC, SP, SR;                              
+        PC = 0x1H; // h/w sets PC to address 0xIH                     
+                   // contains the code of interrupt hanlders   
+    }
+}
+Interrput_handler(){
+    /* step 2 */
+    save_processor_state(); // saves most CPU registers (push in)
+    handle_interrupt();
+    restore_proecessor_state(); // restore the register (pop out)
+    /* step 3 */
+    return from interrupt; //restores saved PC, SP, SR 
+}
+
+OS uses three hardware features
+    - CPU modes
+    - memory management
+    - trap
+
+CPU modes
+CPUs have two modes : kernel and undesirable
+    - when CPU is in "kernel mode", every instruction can be executed
+    - when CPU is in "user mode", only a subset of instrucitions can be executed
+    - CPU maintians current mode in its status register
+
+                    CPU instruction set
+            |-----------------------------------|
+            |     |-------------------|         |
+            |     |    user mode      | ----------- typical instructions : add, sun ,push pop ...
+            |     |    instructions   |         |
+            |     |-------------------|         |
+            |                                   |
+            |     priviledged instructions      |--- allowing accessing devices such as disk and timer, 
+            |-----------------------------------|    controlling interrupts, setting CPU mode
+
+when the programs (running in the use mode) call priviledged instructions,
+the proceessor will not run the instruction. Instead the processor will
+generate an exception, which cause the CPU to switch to kernel mode, and the OS will then regain control
+
+###### OS runs in kernel mode ######
+- OS will have all priviledge, access to all memory, devices etc
+- when h/w boots, it runs in kenrel mode 
+- OS ensures that program run in user mode only
+    so that progrmas have limited privileges.
+        - no direct access to devices, limited memory access
+        - when programs need access to device, they MUST call OS
+- OS is a priviledged , trusted program
+
+###### Memory management unit #######
+Q. how does the CPU run mutliple programs using the same memory address simultaneuously?
+- CPU has memory managmenet unit (MMU)
+
+    { {CPU}  --- {MMU} } ---------|
+                                  |
+                                  |------------{memory}---{disk controller} ------- bus
+
+1. program use virtual memory address (CPU)
+2. CPU sends these virtual address to MMU
+3. MMU translate virtual address to physical address 
+4. MMU access memory using physical address
+
+##### A Simple MMU #####
+- A simple MMU has one base register and one limit register
+- say program p1 is running
+    Base reg = Base 1 (physical addr)
+    Limit reg = Limit 1 (physical addr)
+
+- MMU converts virtual to physical address:
+    Phys addr = Virt addr + Base reg
+    when P1 reads data at virtual addr 0 ,data at phys addr base 1 is returned
+
+- Limit register bounds memory references
+    Base reg <= Phys addr < Limit reg
+
