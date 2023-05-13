@@ -1,0 +1,190 @@
+
+Why we need OS? to get the connection between HW and SW ! 
+
+{HW} -> living in the physical world, concurrent h/w, low power, handling external events, timing, speed
+{SW} -> living in the virtual world, data structures, algorithms, flexibility, extensibility, large scale system
+Both are striving to make the system work correctly and efficiently
+
+######################### what is an operating system? #########################
+OS -> layer of software between hardware and applications.
+    application is usually dedicated to a single task
+    OS serve all applications, also called system software.
+
+                    | program 1 | program 2 | ui | background task | 
+                -------------------------------------------------------
+                                    OS kernel
+                --------------------------------------------------------
+                                    hardware
+                --------------------------------------------------------
+
+###################### what does an operating system do?# #####################
+- OS manages hw resources
+    - allows program to interact with h/w devices
+        -CPU, memory, disk, graphics card, co-processors on PC, moible..
+    - provides simpler interface to devices
+
+- allows running many programs at the same time: 
+    - allows program to share CPU, memory
+    - isolates application from each other
+    as the application can affect each other, write to each other's memory, corrpution occurs
+
+    - isolate itself from applications 
+    Applciation could corrupt OS, the OS would not provide isolation to application.
+
+    Simpler interface What problems occur otherwise?
+    - Application have to be written to specific h/w, program devices directly
+    - Load device command codes into device register
+    - handle initilazation, recalibration, sensing, timing etc
+    - control motors
+    - interpret return codes..etc
+
+####################### Why won't operating system go away? ######################
+- every device run an OS (example with IoT, every device manufacture needs an OS)
+example : 
+    consider a simple MP3 player, invovles many OS issues: implementing file systems for 
+    storing music file, read music from the disc and buffering it, control volumn, display,
+    wireless network access
+- OS ideas applicable to all large application software 
+    - virtualizaiton software manages virtual machine hardware.
+    - cluster computing software manages cluster
+     |_ cluster is the group of computers and servers working together to acheive the common goal.
+    - cloud software manages geographically distributed sotrage hardware
+
+############################## Course contents ############################### 
+
+                        1. Introduction to OS concepts
+                        2. Threads and processors
+                        3. Synchronization and concurrency
+                        4. Memory management, virtual memory
+                        5. Disk management and file systems
+                        6. Time permiiting
+                            - intro to cloud computing
+                            - atomicity and consistency
+                            - virtualizaiton
+
+############################## Design of Operating System ##############################
+- OS manages hw resources
+    - allows running many programs at the same time
+    - allows programs to access h/we
+
+Q. How does OS allow running many programs?
+A. provides a "virtualization" mechanism that allows programs to share resources securely
+
+Q. How does OS allow programs to interact with h/w?
+A. provides a "abstraction" for h/w, implemented via "system calls".
+
+############### virtualizaiton ###############
+- OS provides the illusion that each program is running on its own machine
+    - program thinks it has full access to CPU, memory and disk
+    - This is called virtualizaiton because there is one physical machine,
+      but the OS provides the illusion of multiple virtual machines
+
+Benefits of virtualizaiton
+- virtual machines provide resource isolation
+    - program is not aware that ohter program exist, i.e program isolation
+    - program cannot accidentally overwrite another program's memory or files => crash
+    - if a program uses too much memory, disk, etc only its performance degrades
+
+Q. What is the property of an ideal virtual machine?
+A. The ideal virtual machine will behave exactly like a physcial machine. 
+program running on one physical machine cannot directly affect a program running on another machine. 
+This means that a program should not even be able to detect that another program is running.
+In practice, since resources are shared, it is hard to ensure this ideal behavior
+In particular, programs can detect that they are not running at full speed, and they do not have
+access to all physical memory ( becuse multiple programs are runnning)
+
+Q. Wow! virtualizaiton!
+virtualizaiton enables portability as well. 
+programmers can write code regardless of the number of physical processors, amount of memory, disk size
+on a specific machine. They do not need to worry what other programs will be run on the machine.
+These things we take for granted weren't around till people invented OS.
+
+Implementing virtualizaiton
+- OS implements virtual machines by virtualizing each physical resource: 
+- processor -> Threads
+    Os provides illusion that a large number of virtual processors, called Threads
+
+>> Threads
+each thread executes its own stream of instructions
+
+- memory -> virtual memory
+    OS provides illusion that each program has access to a large amount of contiguous, private memory.
+
+>> virtual memory 
+large amount of memory : the large depends on the number of bits in processor architecture.
+eg 32 or 64 bit
+
+- disk -> files
+    OS provides illusion that a large number of virtual disks, called files, are availabe to programs
+
+>> network virtualization
+OS provides sockets for network communication, one physical network device, multiple sockets can be in use,
+hides the details of network protocols and layers
+
+- network -> socket
+
+############### concurrency ###############
+"Thread abstraction" is powerful because it allows a program to perform serveral tasks 
+in concurrency(동시실행)or in parallel.
+ eg. web server can serve multiple web requests, by using a thread per requests
+
+However, running threads concurrently raises some challenging problems.
+The OS run multiple programs concurrently, and thus must solve these problems.
+
+recall that a thread is a virtual processor. Each web request can be served by a thread,
+independently of the other threads. Why should we serve web request concurrently?
+OS runs each trhead for a short period, and then runs another thread, in a round robin manner.
+
+The switching of threads induces the problem!
+Alternatively, if both threads run in parallel on two different cores, the same problem occur.
+
+############# system calls ################
+programs request h/w access via system calls.
+    -similar to procedure calls, but a little more complicated
+    - system calls provide an abstraction of h.w making it easier to write programs
+-set of system calls is OS Application
+-examples:
+    create/destroy thread or process
+    allocate or deallocate memory from system
+    read/write a file run 
+
+------------------------------------------
+            Program 1 | Library
+------------------------------------------
+             OS kernel
+------------------------------------------
+             hardware
+------------------------------------------
+
+- program calls read() syscall to read a file from disk
+    execution goes via a library that issues a "trap" instruction
+    trap instruction invokes the kernel, which accesses disk
+    kernel retutrns results to program
+- will discuss traps, and need for traps later.
+
+################ OS interface ################
+
+--------------------- Application layer ------------------------------
+
+    system calls: thread_create(), read(), write(), ...
+
+----(OS interface)---- OS Kernel -----------------------|
+                                                        |
+    Thread scheduler    Memory management               |
+    Device Mgmt         File system     Network Comm    |
+    Protection          Process Mgmt    Security        |
+                                                        | 
+-------------- Hardware layer -------(physical machine interface)-------
+    Network             CPU             Memory
+    Printer             Monitor         Disk
+------------------------------------------------------------------------
+
+Application generally access h/w directly, vis the physical machine interface,
+e.g, when running most instructions. 
+When they need to access devices, they use system calls
+
+{OS interface} => set of system calls 
+
+{Virtual machine interface} => subset of the physical machine interface + OS interface
+
+
