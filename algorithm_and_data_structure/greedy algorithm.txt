@@ -1,0 +1,111 @@
+
+Lucky : I was frustrustated by the dynamic programming problems and this dp can be extended to greedy problem
+which drove me crazy as I could not understand it.
+
+so lets look at the article for the finding maximum possible items (value) that can be stolen...
+
+### problem : finding maximum possible stolen value from houses ###
+
+There are N houses built in a line, each of which contains some value in it.
+A thief is going to steal the maximum value of these houses, but he cannot steal in two
+adjacent houses because the owner of stolen houses will tell two neighbors.
+
+hav = {6,7,1,3,8,2,4}
+output = 19
+explanation = 6, 1, 8, 4 from the house.
+
+hav = {5,3,4,11,2}
+output = 16
+explanation = 5, 11 from the house
+
+This is the general problem for the house robbing (greedy algorithm)
+
+################################ Greedy algorithm ################################
+A greedy algorithm is any algorithm that follows problem sovling heurisitc of making
+the locally optimal choice at each stage. 
+
+################ Defintion and motivation for heurisitc ################
+heurisitc is a technique designed for solving a problem more quickly when classic methods are
+too slow for finding an approximate solution, or when classic methods fail to find any exact solution. 
+
+heurisitc function is a function that ranks alternatives in search algorithms at each branching step
+based on availabe information to decide which branch to follow.
+
+the objective of a heurisitc is to produce a solution in a reasonalbe time fram that is good enough for solving
+the problem at hand. This solution may not be the best but still valuable because finding it does not 
+require a prohibitvely long time.
+
+the heurisitc may produce results by themselves, or they may be used in conjunction with optimization
+algorithm to improve their efficiency. Result about NP-hardnes in theoretical computer science make heursitics 
+the only vialbe optino for a variety of complex optimal problems that need to be routinely solved in real world 
+applications.
+
+################ Trade-off ################
+#optimality : when a several solutions exist for a given problem, does the heurisitc guarantee that best solition?
+#completeness : when several solutions exist for a given problem, can the heurisitc find them all? 
+#accuracy and precision : can the heurisitc provide a confidence interval for the purported solution?
+#execution time: is this the best-known heurisitc for solving this type of porblem? Some heuritstics converge faster than others.
+
+
+################# Examples #################
+
+- Simpler problem
+One way of acheving the computational performance gain expected ofa heurisitc consist of
+solving a simpler problem whose solution is also a solution to the initial problem.
+
+-> Travelling salesman problem
+Given a list of cities and the distances between each pair of cities, what is the shortest possible routes
+that visits each city exactly once and return to the origin city?
+
+NP hard problem so an otimal solution for even a moderate size problem is difficult to solve. 
+The greedy algorithm heurisitc says to pick whatever is currently the best next step regardless of whether
+that prevents good steps later. 
+It is a heurisitc in the sense that practice indicates it is a good enough solution, while theory indicates that 
+there are better solutions. 
+
+-> search
+Another example of heurisitc making an algorithm faster occurs in certain search problems. Initially, the heurisitc
+tries every possibility at each step, like the full space search algorithm. But it can stop the search
+at any time if the current possibility is already worse than the best solution already found. 
+In such search problems, a heurisitc can be used to try good choice first so that bad paths can be eliminated early.
+
+In the case of best first searhc algorithm, such as A* search, the heurisitc improves the
+algorithm's convergence while maintaining its correctness as long as the heurisitc is admissible.
+
+
+##################################
+greedy algorithm does not produce an optimal solutions that approximate the global opitmal solution in a 
+reasonalble amount of time.
+
+For example, a grredy strategy for the travelling salesman problem is the following heurisitc:
+"at each step of the journey, visit the nearest unvisited city'. This heurisitc does not intend to find the
+best solution, but it terminates in a reasonable number of steps. 
+finding an optimal solution to such a complex problem typically requires unreasonably many steps.
+
+greedy algorithms optimally solve combinatorial problems having the properties of matrodis and given
+constant-factor approximations  to optimization problems with the submodular structure.
+
+######### specifics #########
+greedy algorithm proudces a good solutions on some mathematical problems.. it has two properties
+
+1. greedy choice property
+we can make whatever choice seems best at the moment and then solve the subproblems that arise later.
+the choice made by a greedy algorithm may depend on choices made so far, but not on future choice or all the
+solutions  to the subproblems. 
+It iteratively makes one greedy choice after another, reducing each given problem into a smaller one.
+
+2. optimal substructure
+a problem exhibits optimal substructure if an optimal solution to the problem contains optimal solutions to the
+sub-problems.
+
+## Case of failure
+Greedy algorithm fail to produce the optimal solution for many other problems and may even produce the
+unique worst possible solution.
+travelling salesman problem -> for each number of cities, thee is an assignment of distance between the cities for which
+the nearest-neighbors heurisitc produces the unique worst possible tour.
+
+global maximum at M && local maximum at m 
+the greedy algorithm will choose what appears to be the optimal immediate choice,
+so it will choose 12 instead of 3 at the second step. (binary tree)
+
+
