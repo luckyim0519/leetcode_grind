@@ -184,3 +184,103 @@ Q. how does the CPU run mutliple programs using the same memory address simultan
 - Limit register bounds memory references
     Base reg <= Phys addr < Limit reg
 
+###### OS and MMU ######
+Lets see how MMU allows 2 programs to use the same memroy address together
+OS sets base, limit register to differetn value when a diffeent program start running
+
+How does MMU enable memory virtualization?
+each program has access to a large amount of contiguous, private memory, starting at 0
+MMU enables exactly that.
+
+How does OS enable memory isolation?
+OS ensures that its own code + data and the different programs are located in different
+physical memory registers. 
+Using the MMU, the OS can limit memory access of regular programs ( each program can access
+physical memory within its own base and limit values), and ensures that program cannot step on
+each other's memory or OS memory.
+
+Can programs change MMU register?
+It must be priviledged operation, or else program could change the MMU register
+values and access any physical memory
+
+Why can't program access device directly?
+
+OS
+Kernel memory 
+I/O 
+Program run in user mode but IO instructions are priviledged. also OS ensures that devices are mapped
+to kernel memory and it uses MMU to ensure that program cannot access kernel memory.
+
+program in User code needs some way to switch to kernel mode:
+Hardware provide "trap instruction" for switching to kernel mode and running OS code.
+
+### Trap ###
+CPU handles trap instruction similar to interrupts... 
+
+    IR_current > (Interrupts) > (Dispatch to handler) > Interrupt handler > return
+
+On trap ( hardware )
+    - CPU saves next instruction
+    - CPU switches to the kernel mode
+    - Runs OS handler code at well-defined locations
+
+OS handler code ( software )
+    - saves processor state 
+    - run kernel function to access h/W
+    - restores processor state
+    - returns to user code, swtiches to the user mode
+
+The switch to kernel mode and running OS handler code has to occur atomically,
+i.e no other instructions can run in between, or else user code may be able to run in 
+kernel mode. Similarly for returning to user code, and switching to user mode.
+
+>> what kind of kernel functions are run: these are the functions that implement system call functionality.
+
+### System call ###
+- program request h/w access via system calls
+- Unix system calls
+    - process related : forx, exec, wait , exit, kill, signal
+    - file related : open, read, write, close, link, unlink, chdir
+
+    program 1 | Library  (read)  <- code runs in user mode
+    Os kernel            (trap)  <- code runs in kernel mode
+    HW                   (trap)  
+
+### Invoking System call ###
+
+(1)
+usercode ( ) {  //c code
+    ...
+    read(fd, buffer, 20);
+    ...
+}
+(2)
+usercode ( ) { // assembly
+
+    ...
+    lea     -0x20 (%rbp), %rcx ; rcx = buffer
+    mov     -0x4 (%rbp), %eax  ; eax = fd            //system call number passed in eax
+    mov     $0x14, %edx        ; edx = 20            
+    mov     %rcx, %rsi         ; rsi = rcx = buffer  
+    mov     %eax, %edi         ; edi = eax = fd      //first param passed in edi, seocnd param passed in rsi, third in edx
+    callq   0x690 <read@plt>   ; call read library fn 
+    ...
+} 
+
+(3)
+read ( ) { //library fn
+    ...
+    mov     $0x0, %eax         ; eax = system call nr 
+    syscall                    ; trap instruction
+    ...
+}
+
+Normally, the OS chooses the calling convention, i.e the registers that need to 
+be loaded to pass parameters of the system call to the kernel. 
+
+The kernel reads these registers (edi, rsi, edx) to determine which system call handler to invoke,
+and the parameters to pass to the system call handler.
+
+
+lea is the load effiective address.
+-0x20 is the address of buffer (buffer is a pointer)
