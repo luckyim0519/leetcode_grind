@@ -109,3 +109,19 @@ the greedy algorithm will choose what appears to be the optimal immediate choice
 so it will choose 12 instead of 3 at the second step. (binary tree)
 
 
+#### Applications ####
+Greedy algorithm fial to fin the globally optimal solution because they usually do not
+operate exhaustively on all the data. 
+If the greedy algorithm can be proven to yield the global optimum for a given problem class,
+it typically becomes the method of choice because it is faster than other optimiztion methods like 
+dynamic programming. 
+Such greedy algorithm are Kruskal's algorithm and Prim's algorithm for finding the
+minimum spanning trees and the algorithm for fidning the optimum Huffman trees.
+
+-- Examples -- 
+(1) activity selection problem
+(2) travelling salesman problem
+(3) matching pursuit
+(4) decision tree learning
+(5) Dijkstra's algorithm and related A* search algorithm for graph searh and shortest path finding
+
