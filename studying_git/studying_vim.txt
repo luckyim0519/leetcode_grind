@@ -1,0 +1,36 @@
+
+###################### INSTALLATION GUIDE #####################
+
+in order to use the Vim in Visual studio code, you just need to install vim extension.
+
+###### CHANGING MODE ######
+[esc] -> to get out of any mode
+###### MOVING AROUND ######
+[h] -> left
+[j] -> down
+[k] -> up
+[l] -> right
+Just to tip, don't memorize this command, let your hand to feel it 
+
+###### Inserting text ######
+[i] -> to insert the text before the cursor
+[a] -> to insert the text after the cursor
+
+###### Deleting text #######
+[x] -> delete the text
+[xxxx] -> deleting the 4 texts .... and so on
+
+###### Undo action ######
+[u] -> undo the action
+[ctrl + r] -> undo the whole action and go back to preceding sotrage
+
+###### Getting out ######
+[zz] -> to exit, this command write the file and exits.
+(as Vim does not automatically make a backup file, the changes are committed
+and there is no turning back)
+
+[:q!] -> to discard the changes you have made, it is called "quit-and-throw away"
+: -> enters command mode
+q -> editor to quit
+! -> override the command modifier
+
