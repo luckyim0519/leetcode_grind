@@ -288,5 +288,45 @@ lea is the load effiective address.
 =======
 
 
+User ----  USer I/O library
+Kernel ---- Device Independent I/O
+            Device driver
 
-######################
+H/W ------- Device controller
+            HW 
+
+Device drivers are software modules that can be pluggedinto an OS to handle a device. 
+OS takes help from device drivers to handle all I/O devices. Device drivers encapsulate device dependent code 
+and implement a standard interface in such a way that code contains device specific register reads/writes.
+
+Device is written by manufacturer.
+
+Device driver performs ...
+1) to accept request from the device independent sw above to it.
+2) Interact with the device controller to take and give I/O and perform required error handling
+3) making sure that the request is executed successfully.
+
+OS manages H/W by virtualization and abstarction.
+
+OS is not a normal program where...
+1) it is entered from different locations in repsonse to external events.
+2) it does not have a single thread of control, it can be invoked simultaneuously by two different events.
+3) it is not supposed to terminate
+4) it can execute any instruction in the machine
+5) it has access to the entire memory on the machine.
+
+thread does not make system call...
+- OS need interrupts from a timer device
+- OS must register a future timer interrupt before it hands control of the CPu over to a thread.
+- when the timer interrupt goes off, the OS gets control.
+
+
+
+
+
+
+
+
+
+
+
