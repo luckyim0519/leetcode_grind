@@ -184,6 +184,7 @@ Q. how does the CPU run mutliple programs using the same memory address simultan
 - Limit register bounds memory references
     Base reg <= Phys addr < Limit reg
 
+
 ###### OS and MMU ######
 Lets see how MMU allows 2 programs to use the same memroy address together
 OS sets base, limit register to differetn value when a diffeent program start running
@@ -284,3 +285,8 @@ and the parameters to pass to the system call handler.
 
 lea is the load effiective address.
 -0x20 is the address of buffer (buffer is a pointer)
+=======
+
+
+
+######################
